@@ -22,19 +22,20 @@
 
 		initialize: function(options) {
 			options || (options = { });
+			options.evented = false;
+			options.hasBorders = false;
+			options.hasControls = false;
 
 			this.callSuper('initialize', options);
 
 			var properties = ['hp', 'speed'];
 			this.stateProperties.concat(properties);
 			
-			this.set('hp', options.hp || 20);
-			this.set('speed', options.hp || 1);
+			this.sethp (options.hp || 20);
+			this.set('speed', options.speed || 0.4);
+			//this.set('radius', this.hp * 5);
 			this.setOriginX ("center");
 			this.setOriginY ("center");
-			this.on("intersect", function (options){
-				console.log	(this.type + " intersect with " + options.target.type);
-			});
 		},
 
 		toObject: function() {
@@ -51,13 +52,12 @@
 			ctx.fillText(this.hp, -10, 0);
 		},
 
-		onclicked: function () {
+		sethp: function (value) {
 			var self = this;
-			this.hp = this.hp - 1 ;
-			var prop = {
-				onChange : global.canvas.render_bind
-			};
-			if (this.hp === 0){
+			this.hp = value;
+			var prop = {};
+			if (this.hp <= 0){
+				this.hp = 0;
 				prop.onComplete = function () {
 					global.canvas.remove(self);
 				}
