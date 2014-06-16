@@ -22,10 +22,10 @@
 
 		initialize: function(options) {
 			options || (options = { });
-			/*options.evented = false;
+			options.evented = false;
 			options.hasBorders = false;
 			options.hasControls = false;
-*/
+
 			this.callSuper('initialize', options);
 
 			var properties = ['hp', 'speed'];
@@ -33,7 +33,6 @@
 			
 			this.sethp (options.hp || 20);
 			this.set('speed', options.speed || 0.4);
-			//this.set('radius', this.hp * 5);
 			this.setOriginX ("center");
 			this.setOriginY ("center");
 

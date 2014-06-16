@@ -14,7 +14,12 @@
 	function tick () {
 		var now = new Date ().getTime();
 		global.elapsed_time = now - global.start_time;
-		canvas.fire("tick");
+		try{
+			canvas.fire("tick");
+		} catch (e){
+			console.error("Error happened idiot");
+			console.error(e);
+		}
 		canvas.renderAll();
 		fabric.util.requestAnimFrame(tick);
 	}
@@ -29,25 +34,41 @@
 		canvas.add(c);
 	}
 
+	var bad_circle_time = 5000;
 	var next_circle_time = 2000;
 	var add_circle_time = 1500;
 	canvas.on("tick", function (){
 		if (global.elapsed_time > next_circle_time){
 			next_circle_time = global.elapsed_time + add_circle_time;
 			add_circle_time += 500;
-			//add_gcircle ();
+			add_gcircle ();
+		}
+		if (global.elapsed_time > bad_circle_time){
+			bad_circle_time = global.elapsed_time + 3000;
+			add_rcircle ();
 		}
 	});
 	var add_gcircle = function () {
 		var hp = 1;
-		r = new global.GoodCircle({
+		var r = new global.GoodCircle({
 			hp : hp
-		})
+		});
 
 		r.left = Math.round (Math.random() * 400) + 100;
 		r.top = Math.round (Math.random() * 200) + 100;
 
 		canvas.add(r);
+	}
+	var add_rcircle = function () {
+		var hp = 3;
+		var c = new global.BadCircle({
+			hp : hp
+		});
+
+		c.left = Math.round (Math.random() * 400) + 100;
+		c.top = Math.round (Math.random() * 200) + 100;
+
+		canvas.add(c);
 	}
 
 	canvas.on("after:render", function () {
