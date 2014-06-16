@@ -19,7 +19,7 @@
 			this.callSuper("initialize", options);
 
 			this.on("added", function(){
-				this._choose_move();
+				//this._choose_move();
 			});
 			this.on("intersect", function(opt) {
 				var target = opt.target;

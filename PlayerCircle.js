@@ -4,7 +4,7 @@
 
 		initialize: function (opt) {
 			var options = {
-				fill: "blue"
+				fill: "#79bbff"
 			};
 
 			if (opt.hp){

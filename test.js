@@ -35,11 +35,11 @@
 		if (global.elapsed_time > next_circle_time){
 			next_circle_time = global.elapsed_time + add_circle_time;
 			add_circle_time += 500;
-			add_gcircle ();
+			//add_gcircle ();
 		}
 	});
 	var add_gcircle = function () {
-		var hp = 10;
+		var hp = 1;
 		r = new global.GoodCircle({
 			hp : hp
 		})
@@ -57,7 +57,8 @@
 			for (var j = i + 1; j < items.length; j ++) {
 				var other = items[j];
 				var isIntersecting = 	selected.intersectsWithObject(other) ||
-                               			selected.isContainedWithinObject(other);
+                               			selected.isContainedWithinObject(other) ||
+                               			other.isContainedWithinObject(selected);
 
                 if (isIntersecting){
                 	selected.fire("intersect", {target:other});
@@ -71,27 +72,78 @@
 
 //Button init
 (function (){
-	var up = document.getElementById("upbutton");
-	up.innerHTML = "Up";
-	up.onclick = function () {
+	function moveup() {
 		global.player.move("up");
 	}
 
-	var left = document.getElementById("leftbutton");
-	left.innerHTML = "Left";
-	left.onclick = function () {
+	function moveleft() {
 		global.player.move("left");
 	}
-
-	var right = document.getElementById("rightbutton");
-	right.innerHTML = "Right";
-	right.onclick = function () {
+	
+	function moveright() {
 		global.player.move("right");
 	}
 
-	var down = document.getElementById("downbutton");
-	down.innerHTML = "Down";
-	down.onclick = function () {
+	function movedown() {
 		global.player.move("down");
 	}
+
+	var up = document.getElementById("upbutton");
+	up.innerHTML = "Up";
+	up.onclick = moveup;
+
+	var left = document.getElementById("leftbutton");
+	left.innerHTML = "Left";
+	left.onclick = moveleft;
+
+	var right = document.getElementById("rightbutton");
+	right.innerHTML = "Right";
+	right.onclick = moveright;
+
+	var down = document.getElementById("downbutton");
+	down.innerHTML = "Down";
+	down.onclick = movedown;
+
+	// keyboard
+	(function (){
+		// dict : keycode -> {button, handler}
+		var keyHandlers = {
+			37 : {
+				handler: moveleft,
+				button : left
+			},
+			38 : {
+				handler: moveup,
+				button: up
+			},
+			39 : {
+				handler: moveright,
+				button: right
+			},
+			40 : {
+				handler: movedown,
+				button: down
+			}
+		};
+		function simulateClick(el) {
+		    var evt = document.createEvent("MouseEvents");
+		    evt.initMouseEvent("click", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+		    el.dispatchEvent(evt);
+		}
+
+		var hotkeyActive = false;
+		window.addEventListener('keydown', function(e) {
+		    if(!hotkeyActive && e.keyCode in keyHandlers) {
+		        hotkeyActive = true;
+		        var button = keyHandlers[e.keyCode].button;
+		        button.className = 'active';
+		        var keyupHandler = function (event) {
+		            hotkeyActive = false;
+		            button.className = '';
+		            simulateClick(button);
+		            window.removeEventListener('keyup', keyupHandler, false);
+		        };
+		        window.addEventListener('keyup', keyupHandler, false);
+		    }
+		}, false);	}) ();	
 }) ();
