@@ -32,7 +32,7 @@
 			this.stateProperties.concat(properties);
 			
 			this.sethp (options.hp || 20);
-			this.set('speed', options.speed || 0.4);
+			this.set('speed', options.speed || 4);
 			this.setOriginX ("center");
 			this.setOriginY ("center");
 

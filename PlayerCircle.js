@@ -33,7 +33,7 @@
 
 			var dir = { up: 'top', down: 'top',left: 'left', right: 'left' } [direction];
 			var sign= { up: '-', left:'-', down:'+', right:'+'} [direction];
-			this.animate(dir, sign+"=100")
+			this.animate(dir, sign+"="+this.speed);
 		}
 	});
 }) ();
