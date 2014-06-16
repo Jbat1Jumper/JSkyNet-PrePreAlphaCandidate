@@ -35,15 +35,6 @@
 			this.set('speed', options.speed || 4);
 			this.setOriginX ("center");
 			this.setOriginY ("center");
-
-			var text = new fabric.Text ("", { left: 100, top: 100 });
-			global.canvas.add(text);
-			this.on("moving", function (e){
-				var x = e.clientX;
-				var y = e.clientY;
-
-				text.setText( x + "," + y );
-			});
 		},
 
 		toObject: function() {

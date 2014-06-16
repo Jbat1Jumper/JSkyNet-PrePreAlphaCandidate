@@ -73,9 +73,16 @@
 			.center{
 				text-align: center;
 			}
+			#logger{
+				float:left;
+			}
 		</style>
 	</head>
 	<body>
+		<div id="logger">
+			<div id="fps"></div>
+			<div id="count"></div>
+		</div>
 		<div class="canvas-container">
 			<canvas id="canvas" width="1024" height="600"></canvas>
 		</div>
@@ -90,8 +97,6 @@
 				<button id="rightbutton">TO FILL</button>
 			</div>
 		</div>
-
-		<div id="logger"></div>
 
 		<script type="text/javascript" src="fabric.js"></script>
 		<!-- -->

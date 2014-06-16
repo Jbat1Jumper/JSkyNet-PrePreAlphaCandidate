@@ -22,6 +22,13 @@
 		}
 		canvas.renderAll();
 		fabric.util.requestAnimFrame(tick);
+
+		var time_tick = now - global.last_tick; // In milliseconds
+		var fps = Math.round(1000 / time_tick);
+		document.getElementById("fps").innerHTML = fps + " FPS";
+		global.last_tick = now;
+
+		document.getElementById("count").innerHTML = canvas.size() + " Objets";
 	}
 	window.onload = function (){
 		global.start_time = new Date ().getTime ();
@@ -152,19 +159,34 @@
 		    el.dispatchEvent(evt);
 		}
 
-		var hotkeyActive = false;
 		window.addEventListener('keydown', function(e) {
-		    if(!hotkeyActive && e.keyCode in keyHandlers) {
-		        hotkeyActive = true;
-		        var button = keyHandlers[e.keyCode].button;
-		        button.className = 'active';
+		    if(e.keyCode in keyHandlers) {
+		       	var key_desc = keyHandlers [e.keyCode];
+		        key_desc.button.className = 'active';
+		        simulateClick(key_desc.button);
 		        var keyupHandler = function (event) {
-		            hotkeyActive = false;
-		            button.className = '';
-		            simulateClick(button);
+		            key_desc.active = false;
+		            key_desc.button.className = '';
 		            window.removeEventListener('keyup', keyupHandler, false);
 		        };
-		        window.addEventListener('keyup', keyupHandler, false);
+		        if (!key_desc.active) {
+		        	window.addEventListener('keyup', keyupHandler, false);
+		    	}
+		        key_desc.active = true;
 		    }
-		}, false);	}) ();	
+		}, false);
+
+		global.canvas.on("tick", function (){
+			for (desc in keyHandlers){
+				if(desc.active){
+					simulateClick(desc.button);
+				}
+			}
+		});
+
+		global.ease = {};
+		global.ease.linear = function (t, b, c, d) {
+			return c*t/d + b;
+		};
+	}) ();
 }) ();

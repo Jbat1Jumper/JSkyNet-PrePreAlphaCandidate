@@ -12,7 +12,7 @@
 			}
 
 			this.callSuper("initialize", options);
-
+			this.set('speed', 200);
 			this.on("intersect", function (opt){
 				var target = opt.target;
 				if (target.type === "GoodCircle"){
@@ -33,7 +33,19 @@
 
 			var dir = { up: 'top', down: 'top',left: 'left', right: 'left' } [direction];
 			var sign= { up: '-', left:'-', down:'+', right:'+'} [direction];
-			this.animate(dir, sign+"="+this.speed);
+
+			var self = this;
+
+			if (!self._moving){
+				self._moving = true;
+				this.animate(dir, sign+"=5", {
+					onComplete: function () {
+						self._moving = false;
+					},
+					easing: global.ease.linear.bind(),
+					duration: 1/this.speed
+				});
+			}
 		}
 	});
 }) ();
